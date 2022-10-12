@@ -9,20 +9,22 @@ import (
 )
 
 func TestConfig(t *testing.T) {
-    old := file
-    defer func() { file = old }()
+	file := func() []byte {
+		d, err := json.Marshal(create.Logfile{Missions: []create.Mission{}})
+		if err != nil {
+			t.Fatal(err)
+		}
 
-    file = func(string) []byte {
-        d, err := json.Marshal(create.Logfile{Missions: []create.Mission{}})
-        if err != nil {
-            t.Fatal(err)
-        }
+		return d
+	}
 
-        return d
-    }
+	export, err := Export(file())
 
-	export := Export()
-    if reflect.TypeOf(export).String() != "html.Response" {
-        t.Fatalf("%s is not type of %s", reflect.TypeOf(export),  "html.Response")
-    }
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if reflect.TypeOf(export).String() != "string" {
+		t.Fatalf("%s is not type of %s", reflect.TypeOf(export), "string")
+	}
 }

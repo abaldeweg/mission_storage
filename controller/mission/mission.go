@@ -2,6 +2,7 @@ package mission
 
 import (
 	"encoding/json"
+	"log"
 
 	"github.com/abaldeweg/mission_storage/export/html"
 	"github.com/abaldeweg/mission_storage/mission/create"
@@ -12,48 +13,58 @@ import (
 var filename = "mission.json"
 
 type Msg struct {
-    Msg string `json:"msg"`
+	Msg string `json:"msg"`
+}
+
+type Response struct {
+	Type string `json:"type"`
+	Body string `json:"body" binding:"required"`
 }
 
 func Show(c *gin.Context) {
-    if !storage.Exists(filename) {
-        c.AbortWithStatus(404)
-        return
-    }
+	if !storage.Exists(filename) {
+		c.AbortWithStatus(404)
+		return
+	}
 
-    var d create.Logfile
-    if err:= json.Unmarshal(storage.Read(filename), &d); err != nil {
-        c.AbortWithStatus(404)
-        return
-    }
+	var d create.Logfile
+	if err := json.Unmarshal(storage.Read(filename), &d); err != nil {
+		c.AbortWithStatus(404)
+		return
+	}
 
-    c.JSON(200, d)
+	c.JSON(200, d)
 }
 
 func Create(c *gin.Context) {
-    create.Create()
+	create.Create()
 
-    d := Msg{Msg: "SUCCESS"}
+	d := Msg{Msg: "SUCCESS"}
 
-    c.JSON(200, d)
+	c.JSON(200, d)
 }
 
 func Update(c *gin.Context) {
-    var file html.Response
-    if err := c.ShouldBind(&file); err != nil {
-        c.AbortWithStatus(404)
-        return
-    }
+	var file Response
+	if err := c.ShouldBind(&file); err != nil {
+		c.AbortWithStatus(404)
+		return
+	}
 
-    storage.Write(filename, file.Body)
+	storage.Write(filename, file.Body)
 
-    d := Msg{Msg: "SUCCESS"}
+	d := Msg{Msg: "SUCCESS"}
 
-    c.JSON(200, d)
+	c.JSON(200, d)
 }
 
 func HtmlExport(c *gin.Context) {
-    d := html.Export()
+	b, err := html.Export(storage.Read(filename))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    c.JSON(200, d)
+	d := Response{Type: "html", Body: b}
+
+	c.JSON(200, d)
 }

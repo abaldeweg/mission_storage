@@ -8,13 +8,7 @@ import (
 	"time"
 
 	"github.com/abaldeweg/mission_storage/mission/create"
-	"github.com/abaldeweg/mission_storage/storage"
 )
-
-type Response struct {
-    Type string `json:"type"`
-    Body string `json:"body" binding:"required"`
-}
 
 var filename = "mission.json"
 
@@ -26,49 +20,40 @@ const tpl = `<ul>
     {{- end -}}
 </ul>`
 
+var store create.Logfile
 
+func Export(content []byte) (string, error) {
+	var b bytes.Buffer
 
-var file = storage.Read
-
-func Export() Response {
-    var b bytes.Buffer
-    storage := unmarshalJson(file(filename))
-
-    t, err := template.New("export").Funcs(template.FuncMap{
-        "formatDate": formatDate,
-        "getUnit": getUnit,
-    }).Parse(tpl)
-	if err != nil {
-		log.Fatal(err)
+	if err := json.Unmarshal([]byte(content), &store); err != nil {
+		return "", err
 	}
 
-	if err = t.Execute(&b, storage); err != nil {
-        log.Fatal(err)
-    }
+	t, err := template.New("export").Funcs(template.FuncMap{
+		"formatDate": formatDate,
+		"getUnit":    getUnit,
+	}).Parse(tpl)
+	if err != nil {
+		return "", err
+	}
 
-    return Response{Type: "html", Body: b.String()}
+	if err = t.Execute(&b, store); err != nil {
+		return "", err
+	}
+
+	return b.String(), nil
 }
 
 func formatDate(val string) string {
-    t, err := time.Parse("2006-01-02", val)
-    if err != nil {
-        log.Fatal(err)
-    }
+	t, err := time.Parse("2006-01-02", val)
+	if err != nil {
+		log.Fatal(err)
+		return ""
+	}
 
-    return t.Format("02.01.2006")
+	return t.Format("02.01.2006")
 }
 
 func getUnit(val string) string {
-    missions := unmarshalJson(file(filename))
-
-    return missions.Replacements[val]
-}
-
-func unmarshalJson(blob []byte) create.Logfile {
-    var d create.Logfile
-	if err := json.Unmarshal([]byte(blob), &d); err != nil {
-		log.Fatal(err)
-	}
-
-    return d
+	return store.Replacements[val]
 }
