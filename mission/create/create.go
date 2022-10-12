@@ -2,10 +2,7 @@ package create
 
 import (
 	"encoding/json"
-	"log"
 	"time"
-
-	"github.com/abaldeweg/mission_storage/storage"
 )
 
 type Logfile struct {
@@ -15,35 +12,29 @@ type Logfile struct {
 }
 
 type Mission struct {
-	Date      string   `json:"date"`
-	Time      string   `json:"time"`
-	Keyword   string   `json:"keyword"`
-	Situation string   `json:"situation"`
-	Unit      string   `json:"unit"`
-	Location  string   `json:"location"`
-	Links     []string `json:"links"`
-	Private   bool     `json:"private"`
+	Date      string `json:"date"`
+	Situation string `json:"situation"`
+	Unit      string `json:"unit"`
+	Location  string `json:"location"`
+	Private   bool   `json:"private"`
 }
 
-func Create() {
-	filename := "mission.json"
-
+func Create(data []byte) (string, error) {
 	create := Mission{
 		Date: time.Now().Format("2006-01-02"),
-		Time: time.Now().Format("15:04"),
 	}
 
 	var t Logfile
-	if err := json.Unmarshal([]byte(string(storage.Read(filename))), &t); err != nil {
-		log.Fatal(err)
+	if err := json.Unmarshal(data, &t); err != nil {
+		return "", err
 	}
 
 	t.Missions = append(t.Missions, create)
 
 	d, err := json.Marshal(&t)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 
-	storage.Write(filename, string(d))
+	return string(d), nil
 }

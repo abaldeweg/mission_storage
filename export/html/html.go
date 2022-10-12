@@ -10,12 +10,10 @@ import (
 	"github.com/abaldeweg/mission_storage/mission/create"
 )
 
-var filename = "mission.json"
-
 const tpl = `<ul>
     {{- range .Missions -}}
     {{- if eq .Private false -}}
-    <li>{{ formatDate .Date }} {{ getUnit .Unit }}: {{ .Situation }}, {{ .Location }}</li>
+    <li>{{ formatDate .Date }}, {{ getUnit .Unit }}, {{ .Location }}: {{ .Situation }}</li>
     {{- end -}}
     {{- end -}}
 </ul>`

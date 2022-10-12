@@ -37,7 +37,12 @@ func Show(c *gin.Context) {
 }
 
 func Create(c *gin.Context) {
-	create.Create()
+	m, err := create.Create([]byte(string(storage.Read(filename))))
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    storage.Write(filename, m)
 
 	d := Msg{Msg: "SUCCESS"}
 
