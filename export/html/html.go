@@ -7,8 +7,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/abaldeweg/storage/mission/create"
-	"github.com/abaldeweg/storage/storage"
+	"github.com/abaldeweg/mission_storage/mission/create"
+	"github.com/abaldeweg/mission_storage/storage"
 )
 
 type Response struct {
@@ -26,10 +26,7 @@ const tpl = `<ul>
     {{- end -}}
 </ul>`
 
-func init() {
-    log.SetPrefix("html: ")
-    log.SetFlags(0)
-}
+
 
 var file = storage.Read
 

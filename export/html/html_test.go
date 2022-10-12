@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/abaldeweg/storage/mission/create"
+	"github.com/abaldeweg/mission_storage/mission/create"
 )
 
 func TestConfig(t *testing.T) {

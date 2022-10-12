@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/abaldeweg/storage/router"
+	"github.com/abaldeweg/mission_storage/router"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )

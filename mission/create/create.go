@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/abaldeweg/storage/storage"
+	"github.com/abaldeweg/mission_storage/storage"
 )
 
 type Logfile struct {
@@ -25,10 +25,7 @@ type Mission struct {
     Private bool `json:"private"`
 }
 
-func init() {
-    log.SetPrefix("create: ")
-    log.SetFlags(0)
-}
+
 
 func Create(){
     filename := "mission.json"

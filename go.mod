@@ -1,4 +1,4 @@
-module github.com/abaldeweg/storage
+module github.com/abaldeweg/mission_storage
 
 go 1.19
 

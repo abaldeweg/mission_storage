@@ -3,7 +3,7 @@ package router
 import (
 	"os"
 
-	"github.com/abaldeweg/storage/controller/mission"
+	"github.com/abaldeweg/mission_storage/controller/mission"
 	"github.com/gin-gonic/gin"
 )
 

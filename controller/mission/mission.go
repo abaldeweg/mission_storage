@@ -2,11 +2,10 @@ package mission
 
 import (
 	"encoding/json"
-	"log"
 
-	"github.com/abaldeweg/storage/export/html"
-	"github.com/abaldeweg/storage/mission/create"
-	"github.com/abaldeweg/storage/storage"
+	"github.com/abaldeweg/mission_storage/export/html"
+	"github.com/abaldeweg/mission_storage/mission/create"
+	"github.com/abaldeweg/mission_storage/storage"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,11 +13,6 @@ var filename = "mission.json"
 
 type Msg struct {
     Msg string `json:"msg"`
-}
-
-func init() {
-    log.SetPrefix("mission: ")
-    log.SetFlags(0)
 }
 
 func Show(c *gin.Context) {
