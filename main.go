@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/abaldeweg/mission_storage/router"
@@ -12,7 +11,7 @@ import (
 func main() {
 	if _, err := os.Stat("./.env"); err == nil {
 		if err := godotenv.Load(); err != nil {
-			log.Fatal("Error loading .env file")
+			panic("Error loading .env file")
 		}
 	}
 
@@ -22,9 +21,7 @@ func main() {
 }
 
 func getGinMode() string {
-	mode := os.Getenv("ENV")
-
-	switch mode {
+	switch os.Getenv("ENV") {
 	case "prod":
 		return gin.ReleaseMode
 	case "dev":
