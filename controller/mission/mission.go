@@ -37,7 +37,7 @@ func Show(c *gin.Context) {
 }
 
 func Create(c *gin.Context) {
-	m, err := create.Create([]byte(string(storage.Read(filename))))
+	m, err := create.Create(storage.Read(filename))
     if err != nil {
         log.Fatal(err)
     }
